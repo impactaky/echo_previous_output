@@ -15,14 +15,14 @@ function echo_last_result(){
 	if [ $ignore_blank_result = 1 ]; then
 		local i=-1
 		local j=$(($match_lines[$i]-$match_lines[$i-1]==2?0:1))
-		while [ $j -le $prev_num ]; do 
+		while [ $j -lt $prev_num ]; do 
 			i=$(($i-1))
 			if [ $((${match_lines[$i]}-$match_lines[$i-1])) -ne 2 ]; then
 				j=$(($j+1))
 			fi
 		done
 	else
-		local i=-1-$prev_num
+		local i=-$prev_num
 	fi
 	if [ $#match_lines = 1 ]; then
 		tmux capture-pane $capture_option -p -S -100000 -E $(($cursor_line-3))

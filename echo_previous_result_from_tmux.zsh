@@ -18,7 +18,7 @@ function echo_last_result(){
 	local cursor_line=`tmux list-panes -F "#{?pane_active,#{cursor_y},}" | sed '/^$/d'`
 	local -a match_lines
 	match_lines=(`tmux capture-pane -p -S -100000 | sed -n '/└─/='`)
-	if [ $prev_num -gt $#match_lines ]; then
+	if [ $prev_num -ge $#match_lines ]; then
 		echo "Error: n option value out of range" 1>&2
 		return 1
 	fi

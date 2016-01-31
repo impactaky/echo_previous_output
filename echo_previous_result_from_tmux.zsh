@@ -23,13 +23,16 @@ function echo_last_result(){
 		return 1
 	fi
 
-	# FIXME out of range error
 	if [ $ignore_blank_result = 1 ]; then
 		local i=-1
 		local j=$(($match_lines[$i]-$match_lines[$i-1]==2?0:1))
+		local inv_match_num=`expr -$#match_lines`
 		while [ $j -lt $prev_num ]; do 
 			i=$(($i-1))
-			if [ $((${match_lines[$i]}-$match_lines[$i-1])) -ne 2 ]; then
+			if [ $i -le $inv_match_num ]; then
+				echo "Error: n option value out of range" 1>&2
+				return 1
+			elif [ $((${match_lines[$i]}-$match_lines[$i-1])) -ne 2 ]; then
 				j=$(($j+1))
 			fi
 		done

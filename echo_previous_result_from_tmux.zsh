@@ -39,11 +39,7 @@ function echo_last_result(){
 	else
 		local i=-$prev_num
 	fi
-	if [ $#match_lines = 1 ]; then
-		tmux capture-pane $capture_option -p -S -100000 -E $(($cursor_line-3))
-	else
-		local offset=$((cursor_line - $match_lines[-1]))
-		tmux capture-pane $capture_option -p -S $(($match_lines[$i-1]+$offset)) -E $(($match_lines[$i]+$offset-3))
-	fi
+	local offset=$((cursor_line - $match_lines[-1]))
+	tmux capture-pane $capture_option -p -S $(($match_lines[$i-1]+$offset)) -E $(($match_lines[$i]+$offset-3))
 	return 0
 }

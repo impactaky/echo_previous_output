@@ -10,6 +10,7 @@ function echo_last_result(){
                 prev_num=$OPTARG;;
             c)  local capture_option="-e";;
             s)  local ignore_blank_result=1;;
+			*)  return 2
         esac
     done
     local -a match_lines

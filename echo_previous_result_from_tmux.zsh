@@ -27,7 +27,7 @@ function echo_last_result(){
         local inv_match_num=`expr -$#match_tail_lines`
         while [ $j -lt $prev_num ]; do 
             i=$(($i-1))
-            if [ $i -le $inv_match_num ]; then
+            if [ $i -lt $inv_match_num ]; then
                 echo "Error: n option value out of range" 1>&2
                 return 1
             elif [ $(($match_tail_lines[$i]-$match_head_lines[$i+1])) -ne -1 ]; then

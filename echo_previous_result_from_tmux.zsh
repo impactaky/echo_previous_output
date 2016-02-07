@@ -16,10 +16,9 @@ function echo_last_result(){
         esac
     done
 	local -a buffer
-	buffer=(${(@f)"$(tmux capture-pane -epJ)"})
+	buffer=$(tmux capture-pane -epJ)
     local -a match_cmd_lines
-	match_cmd_lines=(`IFS='
-	'; echo "$buffer[*]" | sed -n '/'$PromptCmdLinePattern'/='`)
+	match_cmd_lines=(`echo $buffer | sed -n '/'$PromptCmdLinePattern'/='`)
 
     if [ $ignore_blank_result ]; then
         local i=-1
@@ -45,9 +44,6 @@ function echo_last_result(){
 		fi
     fi
 
-    local cursor_line=`tmux list-panes -F "#{?pane_active,#{cursor_y},}" | sed '/^$/d'`
-    local offset=$((cursor_line - $match_cmd_lines[-1]))
-	(IFS='
-	'; echo "$buffer[$match_cmd_lines[$i]+1,$match_cmd_lines[$i+1]-1]")
+	echo $buffer | sed -n "$(($match_cmd_lines[$i]+1)),$(($match_cmd_lines[$i+1]-1))p"
     return 0
 }

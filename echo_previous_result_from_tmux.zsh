@@ -1,4 +1,3 @@
-PromptCmdLinePattern='%'
 
 function echo_last_result(){
     local prev_num=1

@@ -28,7 +28,7 @@ function echo_last_result(){
             if [ $i -lt $inv_match_num ]; then
                 echo "Error: n option value out of range" 1>&2
                 return 1
-            elif [ $(($match_cmd_lines[$i]-$match_cmd_lines[$i+1])) -ne -1 ]; then
+            elif [ $(($match_cmd_lines[$i+1]-$match_cmd_lines[$i])) -ne $PromptLines ]; then
                 j=$(($j+1))
             fi
         done
@@ -38,11 +38,11 @@ function echo_last_result(){
             return 1
         fi
 		local i=$((-$prev_num-1))
-		if [ $(($match_cmd_lines[$i]-$match_cmd_lines[$i+1])) = -1 ]; then
+		if [ $(($match_cmd_lines[$i+1]-$match_cmd_lines[$i])) = $PromptLines ]; then
 			return 0
 		fi
     fi
 
-	echo $buffer | sed -n "$(($match_cmd_lines[$i]+1)),$(($match_cmd_lines[$i+1]-1))p"
+	echo $buffer | sed -n "$(($match_cmd_lines[$i]+1)),$(($match_cmd_lines[$i+1]-$PromptLines))p"
     return 0
 }

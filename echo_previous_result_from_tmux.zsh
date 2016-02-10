@@ -15,7 +15,7 @@ function echo_last_result(){
         esac
     done
 	local -a buffer
-	buffer=$(tmux capture-pane -epJ)
+	buffer=$(tmux capture-pane -epJ -S -$SearchLines)
     local -a match_cmd_lines
 	match_cmd_lines=(`echo $buffer | sed -n '/'$PromptCmdLinePattern'/='`)
 

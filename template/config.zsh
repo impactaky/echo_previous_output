@@ -7,3 +7,5 @@ PromptCmdLinePattern="^$HOST%"
 # Number of $PROMPT lines.
 PromptLines=`echo $PROMPT | wc -l`
 
+# Nuber of buffer lines that use for searching.
+SearchLines=`tmux show-options -gv history-limit`

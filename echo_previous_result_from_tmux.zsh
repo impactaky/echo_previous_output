@@ -6,7 +6,7 @@ function echo_last_result(){
             n)  expr $OPTARG + 0 >/dev/null 2>&1
                 if [ $? -ne 0 ]; then
                     echo "Error: n option has invalid value" 1>&2
-                    return 1
+                    return 3
                 fi
                 prev_num=$OPTARG;;
             c)  local capture_option="-e";;

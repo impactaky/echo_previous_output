@@ -43,6 +43,6 @@ function echo_last_result(){
 		fi
     fi
 
-	echo $buffer | sed -n "$(($match_cmd_lines[$i]+1)),$(($match_cmd_lines[$i+1]-$PromptLines))p"
+	echo $buffer | sed -n "$(($match_cmd_lines[$i]+1)),$(($match_cmd_lines[$i+1]-$PromptLines))p" | sed '/'$Prompt2Pattern'/d'
     return 0
 }

@@ -47,6 +47,12 @@ function set_case3() {
 	set_result "> command\n> command2\n$echo_pattern\n"
 }
 
+function set_case4() {
+	clear_buffer
+	set_result "> command\n> command2\n$echo_pattern\n"
+	set_result "> command\n> command2\n"
+}
+
 set_case1
 [ $(echo_last_result) = $echo_pattern ]
 check_error 0
@@ -82,7 +88,10 @@ check_error 1
 set_case3
 [ $(echo_last_result -s) = $echo_pattern ]
 check_error 0
-echo_last_result -s
 
-# clear
+set_case4
+[ $(echo_last_result -s) = $echo_pattern ]
+check_error 0
+
+clear
 echo -n $log

@@ -15,7 +15,7 @@ function echo_last_result(){
         esac
     done
 	local -a buffer
-	buffer=$(tmux capture-pane -epJ -S -$SearchLines)
+	buffer=$(tmux capture-pane -epJ -S -$SearchLines | sed '/'$Prompt2Pattern'/d')
     local -a match_cmd_lines
 	match_cmd_lines=(`echo $buffer | sed -n '/'$PromptCmdLinePattern'/='`)
 
@@ -43,6 +43,6 @@ function echo_last_result(){
 		fi
     fi
 
-	echo $buffer | sed -n "$(($match_cmd_lines[$i]+1)),$(($match_cmd_lines[$i+1]-$PromptLines))p" | sed '/'$Prompt2Pattern'/d'
+	echo $buffer | sed -n "$(($match_cmd_lines[$i]+1)),$(($match_cmd_lines[$i+1]-$PromptLines))p"
     return 0
 }

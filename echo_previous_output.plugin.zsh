@@ -1,0 +1,1 @@
+./echo_previous_output.zsh

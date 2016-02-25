@@ -1,5 +1,5 @@
 
-function echo_last_result(){
+function echo_previous_output(){
     local prev_num=1
     while getopts cn:sl: opt; do
         case $opt in

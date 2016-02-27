@@ -1,7 +1,7 @@
 
 function echo_previous_output(){
     local prev_num=1
-    while getopts cn:sl: opt; do
+    while getopts c:sl: opt; do
         case $opt in
             n)  expr $OPTARG + 0 >/dev/null 2>&1
                 if [ $? -ne 0 ]; then
@@ -9,7 +9,6 @@ function echo_previous_output(){
                     return 3
                 fi
                 prev_num=$OPTARG;;
-            c)  local capture_option="-e";;
             s)  local ignore_blank_result=1;;
 			*)  return 2
         esac

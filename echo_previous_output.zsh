@@ -20,7 +20,6 @@ function echo_previous_output(){
 	match_cmd_lines=(`echo $buffer | sed -n '/'$PromptCmdLinePattern'/='`)
 
     if [ $ignore_blank_result -eq 1 ]; then
-	echo 'hello'
         local i=-1
         local j=0
         local inv_match_num=`expr -$#match_cmd_lines`

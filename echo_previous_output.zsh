@@ -1,7 +1,8 @@
 
 function echo_previous_output(){
     local prev_num=1
-    while getopts c:sl: opt; do
+	local ignore_blank_result=1
+    while getopts sn: opt; do
         case $opt in
             n)  expr $OPTARG + 0 >/dev/null 2>&1
                 if [ $? -ne 0 ]; then
@@ -9,7 +10,7 @@ function echo_previous_output(){
                     return 3
                 fi
                 prev_num=$OPTARG;;
-            s)  local ignore_blank_result=1;;
+            i)  ignore_blank_result=0;;
 			*)  return 2
         esac
     done
@@ -18,7 +19,8 @@ function echo_previous_output(){
     local -a match_cmd_lines
 	match_cmd_lines=(`echo $buffer | sed -n '/'$PromptCmdLinePattern'/='`)
 
-    if [ $ignore_blank_result ]; then
+    if [ $ignore_blank_result -eq 1 ]; then
+	echo 'hello'
         local i=-1
         local j=0
         local inv_match_num=`expr -$#match_cmd_lines`

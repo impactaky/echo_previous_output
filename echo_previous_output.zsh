@@ -1,5 +1,9 @@
 
 function echo_previous_output(){
+	if ! [ $TMUX ]; then
+		echo 'tmux is not running'
+		return 0xf
+	fi
     local prev_num=1
 	local ignore_blank_result=1
     while getopts sn: opt; do

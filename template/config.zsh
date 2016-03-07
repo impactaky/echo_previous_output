@@ -4,7 +4,7 @@
 # It must extract only last line of PROMPT.
 PromptCmdLinePattern="^$HOST%"
 
-Promt2Pattern="^>"
+Prompt2Pattern="^>"
 
 # Number of $PROMPT lines.
 PromptLines=`echo $PROMPT | wc -l`

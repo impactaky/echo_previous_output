@@ -10,8 +10,8 @@ function echo_previous_output(){
 		return 0xf
 	fi
     local prev_num=1
-	local ignore_blank_result=1
-    while getopts sn: opt; do
+	local blank_result=0
+    while getopts bn: opt; do
         case $opt in
             n)  expr $OPTARG + 0 >/dev/null 2>&1
                 if [ $? -ne 0 ]; then
@@ -19,39 +19,36 @@ function echo_previous_output(){
                     return 3
                 fi
                 prev_num=$OPTARG;;
-            i)  ignore_blank_result=0;;
+            b)  blank_result=1;;
 			*)  return 2
         esac
     done
 	local -a buffer
-	buffer=$(tmux capture-pane -epJ -S -$SearchLines | sed '/'$Prompt2Pattern'/d')
+	buffer=("${(@f)$(tmux capture-pane -epJ -S -$SearchLines | sed '/'$Prompt2Pattern'/d')}")
     local -a match_cmd_lines
-	match_cmd_lines=(`echo $buffer | sed -n '/'$PromptCmdLinePattern'/='`)
+	match_cmd_lines=(`print -l $buffer | sed -n '/'$PromptCmdLinePattern'/='`)
 
-    if [ $ignore_blank_result -eq 1 ]; then
-        local i=-1
-        local j=0
-        local inv_match_num=`expr -$#match_cmd_lines`
-        while [ $j -lt $prev_num ]; do 
-            i=$(($i-1))
-            if [ $i -lt $inv_match_num ]; then
-                echo "Error: n option value out of range" 1>&2
-                return 1
-            elif [ $(($match_cmd_lines[$i+1]-$match_cmd_lines[$i])) -ne $PromptLines ]; then
-                j=$(($j+1))
-            fi
-        done
-    else
-        if [ $prev_num -ge $#match_cmd_lines ]; then
-            echo "Error: n option value out of range" 1>&2
-            return 1
-        fi
-		local i=$((-$prev_num-1))
-		if [ $(($match_cmd_lines[$i+1]-$match_cmd_lines[$i])) = $PromptLines ]; then
-			return 0
-		fi
-    fi
+    if [ $blank_result -eq 0 ]; then
+		local i=1
+		while [ $i -ne $#match_cmd_lines ]; do
+            if [ $(($match_cmd_lines[-$i]-$match_cmd_lines[-$i-1])) -eq $PromptLines ]; then
+				local delete_num=$match_cmd_lines[-$i-1]
+				buffer=("${(@)buffer[1,$delete_num-1]}" "${(@)buffer[$delete_num+$PromptLines,$#buffer]}")
+			fi
+            i=$(($i+1))
+		done
+		match_cmd_lines=(`print -l $buffer | sed -n '/'$PromptCmdLinePattern'/='`)
+	fi
 
-	echo $buffer | sed -n "$(($match_cmd_lines[$i]+1)),$(($match_cmd_lines[$i+1]-$PromptLines))p"
+	if [ $prev_num -ge $#match_cmd_lines ]; then
+		echo "Error: n option value out of range" 1>&2
+		return 1
+	fi
+	local i=$((-$prev_num-1))
+	if [ $(($match_cmd_lines[$i+1]-$match_cmd_lines[$i])) = $PromptLines ]; then
+		return 0
+	fi
+
+	print -l $buffer | sed -n "$(($match_cmd_lines[$i]+1)),$(($match_cmd_lines[$i+1]-$PromptLines))p"
     return 0
 }

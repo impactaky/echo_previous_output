@@ -1,10 +1,12 @@
 
-[ $PromptCmdLinePattern ] || echo '$PromptCmdLinePattern is undefined'
-[ $Prompt2Pattern ] || echo '$Prompt2Pattern is undefined'
-[ $PromptLines ] || `echo $PROMPT | wc -l`
-[ $SearchLines ] || SearchLines=2000
 
 function echo_previous_output(){
+
+	[ $PromptCmdLinePattern ] || echo '$PromptCmdLinePattern is undefined'
+	[ $Prompt2Pattern ] || echo '$Prompt2Pattern is undefined'
+	[ $PromptLines ] || `echo $PROMPT | wc -l`
+	[ $SearchLines ] || SearchLines=2000
+
 	if ! [ $TMUX ]; then
 		echo 'tmux is not running'
 		return 0xf
